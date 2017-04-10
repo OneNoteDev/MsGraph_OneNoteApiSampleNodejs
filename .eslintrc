@@ -1,0 +1,26 @@
+{
+  "rules": {
+    "no-console": "off",
+    "indent": [ "error", 2 ],
+    "semi": ["error", "always"],
+    "linebreak-style": [ "error", "unix" ],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "no-extra-boolean-cast": "off"
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true,
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "$": true
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "experimentalObjectRestSpread": true,
+    "impliedStrict": true
+  },
+  "extends": "eslint:recommended"
+}
