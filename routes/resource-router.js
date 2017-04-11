@@ -34,7 +34,7 @@ router.post('/page/:exampleType', requestProxy.post, function(req, res) {
   debug('post page');
 
   let htmlResponse;
-  let graphResponse = JSON.parse(req.graphResponse.text);
+  let graphResponse = JSON.parse(req.graphResponse);
 
   // Get the submitted resource url from the JSON response
   var resourceUrl = graphResponse.links ? graphResponse.links.oneNoteWebUrl.href : null;
