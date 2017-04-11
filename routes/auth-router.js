@@ -1,15 +1,19 @@
+const debug = require('debug')('MsGraph:authRouter');
 var express = require('express');
 var router = express.Router();
 
 var liveConnect = require('../lib/liveconnect-client');
 
 /* GET Index page */
-router.get('/api', function (req, res) {
+router.get('/', function (req, res) {
+  debug('get index page');
   var authUrl = liveConnect.getAuthUrl();
+  let requestUrl = req.originalUrl;
   res.render('index', { title: 'OneNote API Node.js Sample', authUrl: authUrl});
 });
 
 router.get('/callback', function (req, res) {
+  debug('get redirect callback')
   // Get the auth code from the callback url query parameters
   var authCode = req.query['code'];
 
@@ -45,44 +49,5 @@ router.get('/callback', function (req, res) {
   }
 });
 
-
-  /* POST Create example request */
-router.post('/', function (req, res) {
-  // var accessToken = req.cookies['access_token'];
-  // var exampleType = req.body['submit'];
-
-  // Render the API response with the created links or with error output
-  var createResultCallback = function (error, httpResponse, body) {
-    if (error) {
-      return res.render('error', {
-        message: 'HTTP Error',
-        error: {details: JSON.stringify(error, null, 2)}
-      });
-    }
-
-    // Parse the body since it is a JSON response
-    var parsedBody;
-    try {
-      parsedBody = JSON.parse(body);
-    } catch (e) {
-      parsedBody = {};
-    }
-    // Get the submitted resource url from the JSON response
-    var resourceUrl = parsedBody['links'] ? parsedBody['links']['oneNoteWebUrl']['href'] : null;
-
-    if (resourceUrl) {
-      res.render('result', {
-        title: 'OneNote API Result',
-        body: body,
-        resourceUrl: resourceUrl
-      });
-    } else {
-      res.render('error', {
-        message: 'OneNote API Error',
-        error: {status: httpResponse.statusCode, details: body}
-      });
-    }
-  };
-});
 
 module.exports = router;

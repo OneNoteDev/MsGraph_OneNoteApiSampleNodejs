@@ -1,35 +1,39 @@
 'use strict';
 
+const fs = require('fs');
+const debug = require('debug')('MsGraph:app');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 
-const authRouter = require('./routes/authRouter');
-const resourceRouter = require('./routes/resourceRouter');
+const authRouter = require('./routes/auth-router');
+const resourceRouter = require('./routes/resource-router');
 
 const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
-app.use(bodyParser());
+app.use(morgan('dev'));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(authRouter);
 app.use(resourceRouter);
 
-// catch 404 and forwarding to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// rendering route
+// app.post('/', function (req, res) {
+//   console.log(req.body);
+//   res.send(html);
+// });
 
 /// error handler
 app.use(function (err, req, res, next) {
+  debug('error');
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

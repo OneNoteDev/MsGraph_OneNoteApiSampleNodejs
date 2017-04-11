@@ -6,6 +6,23 @@ $(function () {
   updateLoginButton(false);
   checkLogin();
   $('#createExamples').find('button').each(function(){
+
+    $(this).on('click', function(e) {
+      e.preventDefault();
+
+      if ($(this).attr('data-method') == 'GET') {
+        $.get(`/${$(this).attr('data-resource')}`)
+        .done(res => $('body').replaceWith(res))
+        .fail(console.log);
+      }
+
+      if ($(this).attr('data-method') == 'POST') {
+        $.post(`/${$(this).attr('data-resource')}/${$(this).val()}`)
+        .done(res => $('body').replaceWith(res))
+        .fail(console.log);
+      }
+    });
+
     $(this).on('mouseup',function(e){
       $(e.target).after('<img src="images/spinner.gif" style="margin-left: 5px;"/>');
       window.setTimeout(function(){disableCreateButtons(true);},0);

@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  button(type="button", id="loginBtn") Sign In
+  p OneNote Create Examples:
+  form(id="createExamples" name="createExamples")
+    button(type="submit", name="submit", value="notebooks", data-method="GET" data-resource="notebooks" disabled) Get all OneNote notebooks
+    br
+    button(type="submit", name="submit", value="notebooks", data-method="GET" data-resource="pages" disabled) Get all OneNote pages
+    br
+    button(type="submit", name="submit", value="notebooks", data-method="GET" data-resource="sections" disabled) Get all OneNote sections
+    br
+    button(type="submit", name="submit", value="text" data-method="POST" data-resource="page" disabled) Create OneNote Page with Text
+  script.
+    window.authUrl = '!{authUrl}';
+  script(src="/javascripts/index.js")
