@@ -18,7 +18,7 @@ The following aspects of the API are covered in this sample. You can find additi
 -	[POST page with HTML rendered as an image\*](http://msdn.microsoft.com/en-us/library/office/dn575432.aspx)
 -	[POST page with a PDF file rendered and attached\*](http://msdn.microsoft.com/EN-US/library/office/dn655137.aspx)
 
-\* Indicates documentation for multi-part POSTS to the OneNote API before its integration into the Microsoft Graph API. The documentation for the outlined request examples work as of the production of this sample, but be aware that changes may be upcoming.
+\* Indicates documentation for multi-part POST requests to the OneNote API before its integration into the Microsoft Graph API. The documentation for the outlined request examples work as of the production of this sample, but be aware that changes may be upcoming.
 
 ### Prerequisites
 
