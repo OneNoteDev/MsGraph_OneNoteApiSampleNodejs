@@ -1,5 +1,4 @@
-var $loginBtn,
-  isLoggedIn;
+var $loginBtn, isLoggedIn;
 
 $(function () {
   $loginBtn = $('#loginBtn');
@@ -12,13 +11,21 @@ $(function () {
 
       if ($(this).attr('data-method') == 'GET') {
         $.get(`/${$(this).attr('data-resource')}`)
-        .done(res => $('body').replaceWith(res))
+        .done(res => {
+          $('body').replaceWith(res);
+          // allows user to navigate with the browser's back button
+          window.history.pushState(null, null, '/result');
+        })
         .fail(console.log);
       }
 
       if ($(this).attr('data-method') == 'POST') {
         $.post(`/${$(this).attr('data-resource')}/${$(this).val()}`)
-        .done(res => $('body').replaceWith(res))
+        .done(res => {
+          $('body').replaceWith(res);
+          // allows user to navigate with the browser's back button
+          window.history.pushState(null, null, '/result');
+        })
         .fail(console.log);
       }
     });
@@ -28,6 +35,13 @@ $(function () {
       window.setTimeout(function(){disableCreateButtons(true);},0);
     });
   });
+
+  window.addEventListener('popstate', function() {
+    // allows use of the back button to return to the index page
+    window.location.reload();
+  });
+
+
 });
 
 function openPopUp(url) {
