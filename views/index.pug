@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1= title
+  button(type="button", id="loginBtn") Sign In
+  p Microsoft Graph OneNote Request Examples:
+  form(id="examples" name="examples")
+    button(type="submit", value="notebooks", data-method="GET" data-resource="notebooks" disabled) Get all OneNote notebooks
+    br
+    button(type="submit", value="notebooks", data-method="GET" data-resource="notebooks-sections" disabled) Get all OneNote notebooks and expand on sections
+    br
+    button(type="submit", value="pages", data-method="GET" data-resource="pages" disabled) Get all OneNote pages
+    br
+    button(type="submit", value="sections", data-method="GET" data-resource="sections" disabled) Get all OneNote sections
+    br
+    button(type="submit", value="text" data-method="POST" data-resource="page" disabled) Create OneNote Page with Text
+    br
+    button(type="submit", value="textimage" data-method="POST" data-resource="page" disabled) Create OneNote Page with Text and Images
+    br
+    button(type="submit", value="html" data-method="POST" data-resource="page" disabled) Create OneNote Page with a Screenshot of HTML
+    br
+    button(type="submit", value="url" data-method="POST" data-resource="page" disabled) Create OneNote Page with a Screenshot of a URL
+    br
+    button(type="submit", value="file" data-method="POST" data-resource="page" disabled) Create OneNote Page with an Embedded File
+    br
+  script.
+    window.authUrl = '!{authUrl}';
+  script(src="/javascripts/index.js")

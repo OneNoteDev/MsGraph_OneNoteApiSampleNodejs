@@ -1,6 +1,6 @@
 module.exports = {
-    //Live Connect API information
-    clientId: '000000004011C945',
-    clientSecret: 'U5ofKaQiol75VbohV4hh-2x8XZpcJoPf ',
-    redirectUrl: 'http://onenoteapisamples.com:3000/callback'
+  // App's API information - replace with your own values
+  clientId: process.env.CLIENT_ID || 'YOUR_ID_HERE',
+  clientSecret: process.env.CLIENT_SECRET || 'YOUR_SECRET_HERE',
+  redirectUrl: process.env.REDIRECT_URI || 'http://localhost:3000/callback'
 };
