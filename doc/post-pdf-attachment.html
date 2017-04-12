@@ -29,73 +29,88 @@
               * Create OneNote Page with an Embedded File
               *
               * @param {string} accessToken The access token
-              * @param {createPageCallback} callback The callback with response data
               */
-              this.createPageWithFile = function (accessToken, callback) {
+              this.createPageWithFile = function (accessToken) {
+                debug('createPageWithFile');
                 var htmlPayload =
-                "&lt;!DOCTYPE html&gt;" +
-                "&lt;html&gt;" +
-                "&lt;head&gt;" +
-                "    &lt;title&gt;A page with a file on it (Node.js Sample)&lt;/title&gt;" +
-                "    &lt;meta name=\"created\" value=\"" + dateTimeNowISO() + "\"/&gt;" +
-                "&lt;/head&gt;" +
-                "&lt;body&gt;" +
-                "    &lt;object data-attachment=\"PDF File.pdf\" data=\"name:EmbeddedFile\" type=\"application/pdf\"&gt;&lt;/object&gt;" +
-                "    &lt;img data-render-src=\"name:EmbeddedFile\" /&gt;" +
-                "&lt;/body&gt;" +
-                "&lt;/html&gt;";
+                  `
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                      <title>A page with a file on it (Node.js Sample)</title>
+                      <meta name=\"created\" content=\" ${dateTimeNowISO()} "\"/>
+                  </head>
+                  <body>
+                      <object data-attachment=\"PDF File.pdf\" data=\"name:EmbeddedFile\" type=\"application/pdf\"></object>
+                      <img data-render-src=\"name:EmbeddedFile\" />
+                  </body>
+                  </html>
+                  `;
 
-                createPage(accessToken, {
+                return createPage(accessToken, {
                   'Presentation': {
                     body: htmlPayload,
                     contentType: 'text/html'
                   },
                   'EmbeddedFile': {
-                    body: fs.readFileSync(path.normalize(__dirname + '/../file.pdf')),
+                    body: fs.readFileSync(path.normalize(`${__dirname}/../file.pdf`)),
                     contentType: 'application/pdf'
                   }
-                }, callback, true);
-              }
+                }, true);
+              };
+
               /**
-              * @callback createPageCallback
-              * @param {object} Error
-              * @param {object} HTTP Response
-              * @param {string} Response body
+              * Pages API request builder & sender
+              *
+              * @param {string} accessToken The access token
+              * @param {object} payload The body of the request
+              * @param {boolean} multipart Flag to indicate if a request is multipart
               */
+              function createPage(accessToken, payload, multipart) {
+                debug('Create Page');
 
-              var oneNotePagesApiUrl = 'https://www.onenote.com/api/v1.0/pages';
+                return new Promise((resolve, reject) => {
+                  // Build simple request
+                  if (!multipart) {
+                    superagent
+                      .post(`${baseUrl}/pages`)
+                      .send(payload)
+                      .type('text/html')
+                      .set('Authorization', `Bearer ${accessToken}`)
+                      .end((err, res) => {
+                        if (err) return reject(err);
+                        return resolve(res.text);
+                      });
 
-              /* Pages API request builder & sender */
-              function createPage(accessToken, payload, callback, multipart) {
-                var options = {
-                  url: oneNotePagesApiUrl,
-                  headers: {'Authorization': 'Bearer ' + accessToken}
-                };
-                // Build simple request
-                if (!multipart) {
-                  options.headers['Content-Type'] = 'text/html';
-                  options.body = payload;
-                }
-                var r = request.post(options, callback);
-                // Build multi-part request
-                if (multipart) {
-                  var CRLF = '\r\n';
-                  var form = r.form(); // FormData instance
-                  _.each(payload, function (partData, partId) {
-                    form.append(partId, partData.body, {
-                      // Use custom multi-part header
-                      header: CRLF +
-                      '--' + form.getBoundary() + CRLF +
-                      'Content-Disposition: form-data; name=\"' + partId + '\"' + CRLF +
-                      'Content-Type: ' + partData.contentType + CRLF + CRLF
+                  } else {
+
+                    var r = request.post({
+                      url: `${baseUrl}/pages`,
+                      headers: {'Authorization': `Bearer ${accessToken}`}
+                    }, (err, httpResponse, body) => {
+                      if (err) return reject(err);
+                      resolve(body);
                     });
-                  });
-                }
+                  // Build multi-part request
+                    var CRLF = '\r\n';
+                    var form = r.form(); // FormData instance
+                    _.each(payload, function (partData, partId) {
+                      form.append(partId, partData.body, {
+                        // Use custom multi-part header
+                        header: CRLF +
+                          '--' + form.getBoundary() + CRLF +
+                          'Content-Disposition: form-data; name=\"' + partId + '\"' + CRLF +
+                          'Content-Type: ' + partData.contentType + CRLF + CRLF
+                      });
+                    });
+                  }
+                });
               }
 
               function dateTimeNowISO() {
                 return new Date().toISOString();
               }
+
             </pre>
           </div>
         </div>

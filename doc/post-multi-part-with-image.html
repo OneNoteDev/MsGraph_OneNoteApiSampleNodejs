@@ -29,74 +29,89 @@
               * Create OneNote Page with Text and Images
               *
               * @param {string} accessToken The access token
-              * @param {createPageCallback} callback The callback with response data
               */
-              this.createPageWithTextAndImage = function (accessToken, callback) {
+              this.createPageWithTextAndImage = function(accessToken) {
+                debug('createPageWithTextAndImage');
                 var htmlPayload =
-                "&lt;!DOCTYPE html&gt;" +
-                "&lt;html&gt;" +
-                "&lt;head&gt;" +
-                "    &lt;title&gt;A page created containing an image (Node.js Sample)&lt;/title&gt;" +
-                "    &lt;meta name=\"created\" value=\"" + dateTimeNowISO() + "\"&gt;" +
-                "&lt;/head&gt;" +
-                "&lt;body&gt;" +
-                "    &lt;p&gt;This is a page that just contains some simple &lt;i&gt;formatted&lt;/i&gt;" +
-                "    &lt;b&gt;text&lt;/b&gt; and an image&lt;/p&gt;" +
-                "    &lt;img src=\"name:ImageData\" width=\"426\" height=\"68\"&gt;" +
-                "&lt;/body&gt;" +
-                "&lt;/html&gt;";
+                  `<!DOCTYPE html>
+                  <html>
+                  <head>
+                      <title>A page created containing an image (Node.js Sample)</title>
+                      <meta name=\"created\" content=\"${dateTimeNowISO()}"\">
+                  </head>
+                  <body>
+                      <p>This is a page that just contains some simple <i>formatted</i>
+                      <b>text</b> and an image</p>
+                      <img src=\"name:ImageData\" width=\"426\" height=\"68\" >
+                  </body>
+                  </html>
+                  `;
 
-                createPage(accessToken, {
+                return createPage(accessToken, {
                   'Presentation': {
                     body: htmlPayload,
                     contentType: 'text/html'
                   },
                   'ImageData': {
-                    body: fs.readFileSync(path.normalize(__dirname + '/../image.jpg')),
+                    body: fs.readFileSync(path.normalize(`${__dirname}/../image.jpg`)),
                     contentType: 'image/jpeg'
                   }
-                }, callback, true);
+                }, true);
               };
+
+              
               /**
-              * @callback createPageCallback
-              * @param {object} Error
-              * @param {object} HTTP Response
-              * @param {string} Response body
+              * Pages API request builder & sender
+              *
+              * @param {string} accessToken The access token
+              * @param {object} payload The body of the request
+              * @param {boolean} multipart Flag to indicate if a request is multipart
               */
+              function createPage(accessToken, payload, multipart) {
+                debug('Create Page');
 
-              var oneNotePagesApiUrl = 'https://www.onenote.com/api/v1.0/pages';
+                return new Promise((resolve, reject) => {
+                  // Build simple request
+                  if (!multipart) {
+                    superagent
+                      .post(`${baseUrl}/pages`)
+                      .send(payload)
+                      .type('text/html')
+                      .set('Authorization', `Bearer ${accessToken}`)
+                      .end((err, res) => {
+                        if (err) return reject(err);
+                        return resolve(res.text);
+                      });
 
-              /* Pages API request builder & sender */
-              function createPage(accessToken, payload, callback, multipart) {
-                var options = {
-                  url: oneNotePagesApiUrl,
-                  headers: {'Authorization': 'Bearer ' + accessToken}
-                };
-                // Build simple request
-                if (!multipart) {
-                  options.headers['Content-Type'] = 'text/html';
-                  options.body = payload;
-                }
-                var r = request.post(options, callback);
-                // Build multi-part request
-                if (multipart) {
-                  var CRLF = '\r\n';
-                  var form = r.form(); // FormData instance
-                  _.each(payload, function (partData, partId) {
-                    form.append(partId, partData.body, {
-                      // Use custom multi-part header
-                      header: CRLF +
-                      '--' + form.getBoundary() + CRLF +
-                      'Content-Disposition: form-data; name=\"' + partId + '\"' + CRLF +
-                      'Content-Type: ' + partData.contentType + CRLF + CRLF
+                  } else {
+
+                    var r = request.post({
+                      url: `${baseUrl}/pages`,
+                      headers: {'Authorization': `Bearer ${accessToken}`}
+                    }, (err, httpResponse, body) => {
+                      if (err) return reject(err);
+                      resolve(body);
                     });
-                  });
-                }
+                  // Build multi-part request
+                    var CRLF = '\r\n';
+                    var form = r.form(); // FormData instance
+                    _.each(payload, function (partData, partId) {
+                      form.append(partId, partData.body, {
+                        // Use custom multi-part header
+                        header: CRLF +
+                          '--' + form.getBoundary() + CRLF +
+                          'Content-Disposition: form-data; name=\"' + partId + '\"' + CRLF +
+                          'Content-Type: ' + partData.contentType + CRLF + CRLF
+                      });
+                    });
+                  }
+                });
               }
 
               function dateTimeNowISO() {
                 return new Date().toISOString();
               }
+
             </pre>
           </div>
         </div>

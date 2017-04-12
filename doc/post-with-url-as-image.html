@@ -27,64 +27,80 @@
               * Create OneNote Page with a Screenshot of a URL
               *
               * @param {string} accessToken The access token
-              * @param {createPageCallback} callback The callback with response data
               */
-              this.createPageWithScreenshotFromUrl = function (accessToken, callback) {
+              this.createPageWithScreenshotFromUrl = function (accessToken) {
+                debug('createPageWithScreenshotFromUrl');
                 var htmlPayload =
-                "&lt;!DOCTYPE html&gt;" +
-                "&lt;html&gt;" +
-                "&lt;head&gt;" +
-                "    &lt;title&gt;A page created with a URL snapshot on it (Node.js Sample)&lt;/title&gt;" +
-                "    &lt;meta name=\"created\" value=\"" + dateTimeNowISO() + "\"/&gt;" +
-                "&lt;/head&gt;" +
-                "&lt;body&gt;" +
-                "    &lt;img data-render-src=\"http://www.onenote.com\" alt=\"An important web page\" /&gt;" +
-                "    Source URL: &lt;a href=\"http://www.onenote.com\"&gt;http://www.onenote.com&lt;/a&gt;" +
-                "&lt;/body&gt;" +
-                "&lt;/html&gt;";
+                  `
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                      <title>A page created with a URL snapshot on it (Node.js Sample)</title>
+                      <meta name=\"created\" content=\" ${dateTimeNowISO()} "\"/>
+                  </head>
+                  <body>
+                      <img data-render-src=\"http://www.onenote.com\" alt=\"An important web page\" />
+                      Source URL: <a href=\"http://www.onenote.com\">http://www.onenote.com</a>
+                  </body>
+                  </html>
+                  `;
 
-                createPage(accessToken, htmlPayload, callback, false);
+                return createPage(accessToken, htmlPayload, false);
               };
+
+
               /**
-              * @callback createPageCallback
-              * @param {object} Error
-              * @param {object} HTTP Response
-              * @param {string} Response body
+              * Pages API request builder & sender
+              *
+              * @param {string} accessToken The access token
+              * @param {object} payload The body of the request
+              * @param {boolean} multipart Flag to indicate if a request is multipart
               */
+              function createPage(accessToken, payload, multipart) {
+                debug('Create Page');
 
-              var oneNotePagesApiUrl = 'https://www.onenote.com/api/v1.0/pages';
+                return new Promise((resolve, reject) => {
+                  // Build simple request
+                  if (!multipart) {
+                    superagent
+                      .post(`${baseUrl}/pages`)
+                      .send(payload)
+                      .type('text/html')
+                      .set('Authorization', `Bearer ${accessToken}`)
+                      .end((err, res) => {
+                        if (err) return reject(err);
+                        return resolve(res.text);
+                      });
 
-              /* Pages API request builder & sender */
-              function createPage(accessToken, payload, callback, multipart) {
-                var options = {
-                  url: oneNotePagesApiUrl,
-                  headers: {'Authorization': 'Bearer ' + accessToken}
-                };
-                // Build simple request
-                if (!multipart) {
-                  options.headers['Content-Type'] = 'text/html';
-                  options.body = payload;
-                }
-                var r = request.post(options, callback);
-                // Build multi-part request
-                if (multipart) {
-                  var CRLF = '\r\n';
-                  var form = r.form(); // FormData instance
-                  _.each(payload, function (partData, partId) {
-                    form.append(partId, partData.body, {
-                      // Use custom multi-part header
-                      header: CRLF +
-                      '--' + form.getBoundary() + CRLF +
-                      'Content-Disposition: form-data; name=\"' + partId + '\"' + CRLF +
-                      'Content-Type: ' + partData.contentType + CRLF + CRLF
+                  } else {
+
+                    var r = request.post({
+                      url: `${baseUrl}/pages`,
+                      headers: {'Authorization': `Bearer ${accessToken}`}
+                    }, (err, httpResponse, body) => {
+                      if (err) return reject(err);
+                      resolve(body);
                     });
-                  });
-                }
+                  // Build multi-part request
+                    var CRLF = '\r\n';
+                    var form = r.form(); // FormData instance
+                    _.each(payload, function (partData, partId) {
+                      form.append(partId, partData.body, {
+                        // Use custom multi-part header
+                        header: CRLF +
+                          '--' + form.getBoundary() + CRLF +
+                          'Content-Disposition: form-data; name=\"' + partId + '\"' + CRLF +
+                          'Content-Type: ' + partData.contentType + CRLF + CRLF
+                      });
+                    });
+                  }
+                });
               }
 
               function dateTimeNowISO() {
                 return new Date().toISOString();
               }
+
             </pre>
           </div>
         </div>

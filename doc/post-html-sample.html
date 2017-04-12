@@ -51,7 +51,13 @@
                 return createPage(accessToken, htmlPayload, false);
               };
 
-              /* Pages API request builder & sender */
+              /**
+              * Pages API request builder & sender
+              *
+              * @param {string} accessToken The access token
+              * @param {object} payload The body of the request
+              * @param {boolean} multipart Flag to indicate if a request is multipart
+              */
               function createPage(accessToken, payload, multipart) {
                 debug('Create Page');
 
@@ -69,6 +75,7 @@
                       });
 
                   } else {
+
                     var r = request.post({
                       url: `${baseUrl}/pages`,
                       headers: {'Authorization': `Bearer ${accessToken}`}
@@ -76,7 +83,6 @@
                       if (err) return reject(err);
                       resolve(body);
                     });
-
                   // Build multi-part request
                     var CRLF = '\r\n';
                     var form = r.form(); // FormData instance
@@ -91,6 +97,12 @@
                     });
                   }
                 });
+              }
+
+              function dateTimeNowISO() {
+                return new Date().toISOString();
+              }
+
             </pre>
           </div>
         </div>

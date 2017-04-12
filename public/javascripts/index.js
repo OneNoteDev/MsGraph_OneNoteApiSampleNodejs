@@ -4,7 +4,7 @@ $(function () {
   $loginBtn = $('#loginBtn');
   updateLoginButton(false);
   checkLogin();
-  $('#createExamples').find('button').each(function(){
+  $('#examples').find('button').each(function(){
 
     $(this).on('click', function(e) {
       e.preventDefault();
@@ -89,7 +89,7 @@ function getCookie(name) {
   return null;
 }
 
-function devareAllCookies() {
+function deleteAllCookies() {
   var cookies = document.cookie.split(';');
   for (var i = 0; i < cookies.length; i++) {
     var cookie = cookies[i];
@@ -100,7 +100,7 @@ function devareAllCookies() {
 }
 
 function disableCreateButtons(disabled) {
-  $('#createExamples').find('button').each(function () {
+  $('#examples').find('button').each(function () {
     $(this).attr('disabled', disabled);
   });
 }
@@ -115,7 +115,7 @@ function updateLoginButton(isLoggedIn) {
   $loginBtn.on('click', function () {
     disableLoginButton(true);
     if (isLoggedIn) {
-      devareAllCookies();
+      deleteAllCookies();
     } else {
       showLogin();
     }
