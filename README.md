@@ -13,10 +13,12 @@ The following aspects of the API are covered in this sample. You can find additi
 -	[GET a user's OneNote pages](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/page_get)
 -	[GET a user's OneNote sections](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/section_get)
 -	[POST simple HTML to a new OneNote QuickNotes page](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/notes_post_pages)
--	[POST multi-part message with image data included in the request](http://msdn.microsoft.com/EN-US/library/office/dn575432.aspx)
--	[POST page with a URL rendered as an image](http://msdn.microsoft.com/EN-US/library/office/dn575431.aspx)
--	[POST page with HTML rendered as an image](http://msdn.microsoft.com/en-us/library/office/dn575432.aspx)
--	[POST page with a PDF file rendered and attached](http://msdn.microsoft.com/EN-US/library/office/dn655137.aspx)
+-	[POST multi-part message with image data included in the request\*](http://msdn.microsoft.com/EN-US/library/office/dn575432.aspx)
+-	[POST page with a URL rendered as an image\*](http://msdn.microsoft.com/EN-US/library/office/dn575431.aspx)
+-	[POST page with HTML rendered as an image\*](http://msdn.microsoft.com/en-us/library/office/dn575432.aspx)
+-	[POST page with a PDF file rendered and attached\*](http://msdn.microsoft.com/EN-US/library/office/dn655137.aspx)
+
+\* Indicates documentation for multi-part POSTS to the OneNote API before its integration into the Microsoft Graph API. The documentation for the outlined request examples work as of the production of this sample, but be aware that changes may be upcoming.
 
 ### Prerequisites
 
