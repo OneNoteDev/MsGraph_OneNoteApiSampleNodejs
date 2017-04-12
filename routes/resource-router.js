@@ -1,9 +1,9 @@
-var debug = require('debug')('MsGraph:resourceRouter');
-var express = require('express');
-var router = express.Router();
-var pug = require('pug');
+const debug = require('debug')('MsGraph:resourceRouter');
+const express = require('express');
+const router = express.Router();
+const pug = require('pug');
 
-var requestProxy = require('../lib/request-proxy');
+const requestProxy = require('../lib/request-proxy');
 
 router.get('/:resource', requestProxy.get, function(req, res) {
   debug('get resource');
@@ -56,25 +56,8 @@ router.post('/page/:exampleType', requestProxy.post, function(req, res) {
       }
     });
   }
-
-    // Send rendered template back to client
+  // Send rendered template back to client
   res.send(htmlResponse);
 });
-
-
-
-  //
-  // if (resourceUrl) {
-  //   res.render('result', {
-  //     title: 'OneNote API Result',
-  //     body: graphResponse,
-  //     resourceUrl: resourceUrl
-  //   });
-  // } else {
-  //   res.render('error', {
-  //     message: 'OneNote API Error',
-  //     error: {status: req.graphResponse.statusCode, details: graphResponse}
-  //   });
-  // }
 
 module.exports = router;

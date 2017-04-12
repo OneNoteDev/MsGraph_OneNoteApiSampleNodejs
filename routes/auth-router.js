@@ -1,8 +1,8 @@
-var debug = require('debug')('MsGraph:authRouter');
-var express = require('express');
-var router = express.Router();
+const debug = require('debug')('MsGraph:authRouter');
+const express = require('express');
+const router = express.Router();
 
-var authClient = require('../lib/auth-client');
+const authClient = require('../lib/auth-client');
 
 /* GET Index page */
 router.get('/', function (req, res) {
@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/callback', function (req, res) {
-  debug('get redirect callback')
+  debug('get redirect callback');
   // Get the auth code from the callback url query parameters
   var authCode = req.query['code'];
 

@@ -33,11 +33,12 @@
             // Helper function to create an encoded url query string from an object
             function toQueryString(obj) {
               var str = [];
-              for (var p in obj)
-              if (obj.hasOwnProperty(p)) {
-                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+              for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                  str.push(`${key}=${obj[key]}`);
+                }
               }
-              return str.join("&");
+              return str.join('&');
             }
 
             /**

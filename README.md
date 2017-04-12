@@ -1,19 +1,22 @@
-OneNote API Node.js Sample README
----------------------------------
+Microsoft Graph API OneNote Node.js Sample README
+-------------------------------------------------
 
-Created by Microsoft Corporation, 2014. Provided As-is without warranty. Trademarks mentioned here are the property of their owners.
+Created by Microsoft Corporation, 2017. Provided As-is without warranty. Trademarks mentioned here are the property of their owners.
 
 ### API functionality demonstrated in this sample
 
 The following aspects of the API are covered in this sample. You can find additional documentation at the links below.
 
--	[Log-in the user](http://msdn.microsoft.com/EN-US/library/office/dn575435.aspx)
--	[POST simple HTML to a new OneNote QuickNotes page](http://msdn.microsoft.com/EN-US/library/office/dn575428.aspx)
+-	[Log-in the user](https://developer.microsoft.com/en-us/graph/docs/authorization/app_authorization)
+-	[GET a user's OneNote notebooks](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/notebook_get)
+-	[GET a user's OneNote notebooks with expanded sections](https://msdn.microsoft.com/en-us/library/azure/ad/graph/howto/azure-ad-graph-api-supported-queries-filters-and-paging-options?f=255&MSPPError=-2147217396#expand)
+-	[GET a user's OneNote pages](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/page_get)
+-	[GET a user's OneNote sections](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/section_get)
+-	[POST simple HTML to a new OneNote QuickNotes page](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/notes_post_pages)
 -	[POST multi-part message with image data included in the request](http://msdn.microsoft.com/EN-US/library/office/dn575432.aspx)
 -	[POST page with a URL rendered as an image](http://msdn.microsoft.com/EN-US/library/office/dn575431.aspx)
 -	[POST page with HTML rendered as an image](http://msdn.microsoft.com/en-us/library/office/dn575432.aspx)
 -	[POST page with a PDF file rendered and attached](http://msdn.microsoft.com/EN-US/library/office/dn655137.aspx)
--	[Extract the returned oneNoteClientURL and oneNoteWebURL links](http://msdn.microsoft.com/EN-US/library/office/dn575433.aspx)
 
 ### Prerequisites
 
@@ -47,15 +50,15 @@ After you've setup your web server described above,....
 
 This is the initial public release for this code sample.
 
-### Learning more
+### Learning More
 
 -	Visit the [dev.onenote.com](http://dev.onenote.com) Dev Center
 -	Contact us on [StackOverflow (tagged OneNote)](http://go.microsoft.com/fwlink/?LinkID=390182)
 -	Follow us on [Twitter @onenotedev](http://www.twitter.com/onenotedev)
 -	Read our [OneNote Developer blog](http://go.microsoft.com/fwlink/?LinkID=390183)
--	Explore the API using the [apigee.com interactive console](http://go.microsoft.com/fwlink/?LinkID=392871). Also, see the [short overview/tutorial](http://go.microsoft.com/fwlink/?LinkID=390179).
--	[API Reference](http://msdn.microsoft.com/en-us/library/office/dn575437.aspx) documentation
--	[Debugging / Troubleshooting](http://msdn.microsoft.com/EN-US/library/office/dn575430.aspx)
--	[Getting Started](http://go.microsoft.com/fwlink/?LinkID=331026) with the OneNote API
+-	Explore the API using the [Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer)
+-	[API Reference](https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/resources/notes) documentation
+-	[Known Issues](https://developer.microsoft.com/en-us/graph/docs/overview/release_notes)
+-	[Getting Started](https://developer.microsoft.com/en-us/graph/docs/get-started/get-started) with the Microsoft Graph API
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
