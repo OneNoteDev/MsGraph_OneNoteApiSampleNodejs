@@ -1,14 +1,14 @@
-const debug = require('debug')('MsGraph:resourceRouter');
-const express = require('express');
-const router = express.Router();
-const pug = require('pug');
+var debug = require('debug')('MsGraph:resourceRouter');
+var express = require('express');
+var router = express.Router();
+var pug = require('pug');
 
-const requestProxy = require('../lib/request-proxy');
+var requestProxy = require('../lib/request-proxy');
 
 router.get('/:resource', requestProxy.get, function(req, res) {
   debug('get resource');
-  let htmlResponse;
-  let graphResponse = JSON.parse(req.graphResponse.text);
+  var htmlResponse;
+  var graphResponse = JSON.parse(req.graphResponse.text);
   if (graphResponse) {
     // Render html template
     htmlResponse = pug.renderFile('views/get-result.pug', {
@@ -33,8 +33,8 @@ router.get('/:resource', requestProxy.get, function(req, res) {
 router.post('/page/:exampleType', requestProxy.post, function(req, res) {
   debug('post page');
 
-  let htmlResponse;
-  let graphResponse = JSON.parse(req.graphResponse);
+  var htmlResponse;
+  var graphResponse = JSON.parse(req.graphResponse);
 
   // Get the submitted resource url from the JSON response
   var resourceUrl = graphResponse.links ? graphResponse.links.oneNoteWebUrl.href : null;

@@ -1,14 +1,13 @@
-const debug = require('debug')('MsGraph:authRouter');
+var debug = require('debug')('MsGraph:authRouter');
 var express = require('express');
 var router = express.Router();
 
-var liveConnect = require('../lib/liveconnect-client');
+var authClient = require('../lib/auth-client');
 
 /* GET Index page */
 router.get('/', function (req, res) {
   debug('get index page');
-  var authUrl = liveConnect.getAuthUrl();
-  let requestUrl = req.originalUrl;
+  var authUrl = authClient.getAuthUrl();
   res.render('index', { title: 'OneNote API Node.js Sample', authUrl: authUrl});
 });
 
@@ -19,7 +18,7 @@ router.get('/callback', function (req, res) {
 
   if (authCode) {
     // Request an access token from the auth code
-    liveConnect.requestAccessTokenByAuthCode(authCode,
+    authClient.requestAccessTokenByAuthCode(authCode,
       function (responseData) {
         var accessToken = responseData['access_token'],
           refreshToken = responseData['refresh_token'],
@@ -33,7 +32,7 @@ router.get('/callback', function (req, res) {
         } else {
           // Handle an authentication error response
           res.render('error', {
-            message: 'Invalid Live Connect Response',
+            message: 'Invalid Azure AD Auth Response',
             error: {details: JSON.stringify(responseData, null, 2)}
           });
         }
@@ -43,7 +42,7 @@ router.get('/callback', function (req, res) {
     var authError = req.query['error'],
       authErrorDescription = req.query['error_description'];
     res.render('error', {
-      message: 'Live Connect Auth Error',
+      message: 'Azure AD Auth Error',
       error: {status: authError, details: authErrorDescription}
     });
   }

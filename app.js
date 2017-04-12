@@ -1,17 +1,16 @@
 'use strict';
 
-const fs = require('fs');
-const debug = require('debug')('MsGraph:app');
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
+var debug = require('debug')('MsGraph:app');
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var morgan = require('morgan');
 
-const authRouter = require('./routes/auth-router');
-const resourceRouter = require('./routes/resource-router');
+var authRouter = require('./routes/auth-router');
+var resourceRouter = require('./routes/resource-router');
 
-const app = express();
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,12 +23,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(authRouter);
 app.use(resourceRouter);
-
-// rendering route
-// app.post('/', function (req, res) {
-//   console.log(req.body);
-//   res.send(html);
-// });
 
 /// error handler
 app.use(function (err, req, res, next) {

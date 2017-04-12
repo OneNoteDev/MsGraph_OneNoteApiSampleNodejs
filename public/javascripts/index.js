@@ -89,7 +89,7 @@ function getCookie(name) {
   return null;
 }
 
-function deleteAllCookies() {
+function devareAllCookies() {
   var cookies = document.cookie.split(';');
   for (var i = 0; i < cookies.length; i++) {
     var cookie = cookies[i];
@@ -115,7 +115,7 @@ function updateLoginButton(isLoggedIn) {
   $loginBtn.on('click', function () {
     disableLoginButton(true);
     if (isLoggedIn) {
-      deleteAllCookies();
+      devareAllCookies();
     } else {
       showLogin();
     }

@@ -7,7 +7,7 @@
 <body>
   <h2><a id="nodejs"></a><a id="NODE_JS"></a>Authenticate the user with Node.js</h2>
 
-  <p>One of the ways to sign a user in with Node.js is to have a route handle the Live Connect Authentication callback.
+  <p>One of the ways to sign a user in with Node.js is to have a route handle the Azure AD v2.0 Authentication callback.
     The route controller would take the authorization code supplied by the callback and request an access token with a REST client.
     The access token is sent back to the client in a cookie.
   </p>
@@ -41,7 +41,7 @@
             }
 
             /**
-            * Obtain a Live Connect authorization endpoint URL based on configuration.
+            * Obtain a Microsoft Graph authorization endpoint URL based on configuration.
             * @returns {string} The authorization endpoint URL
             */
             this.getAuthUrl = function () {
@@ -57,7 +57,7 @@
               return oauthAuthorizeUrl + "?" + query;
             };
 
-            /* Live Connect API request sender */
+            /* Graph API request sender */
             function requestAccessToken(data, callback) {
               request.post({url: oauthTokenUrl,
                 form: _.extend({
@@ -103,7 +103,7 @@
     </div>
 
     <p>The callback route controller:<br>
-      (The <code>liveConnect</code> variable is an instance of the REST client snippet above)</p>
+      (The <code>authClient</code> variable is an instance of the REST client snippet above)</p>
       <div class="codeSnippetContainer" >
         <div class="codeSnippetContainerTabs">
           <div class="codeSnippetContainerTabSingle" dir="ltr">
@@ -115,42 +115,42 @@
           <div class="codeSnippetContainerCode" dir="ltr">
             <div style="color:Black;">
               <pre>
-                /* GET Live Connect Auth callback. */
-                router.get('/', function (req, res) {
+                /* GET Azure AD v2.0 Auth callback. */
+                router.get('/callback', function (req, res) {
+                  debug('get redirect callback')
                   // Get the auth code from the callback url query parameters
                   var authCode = req.query['code'];
 
                   if (authCode) {
                     // Request an access token from the auth code
-                    liveConnect.requestAccessTokenByAuthCode(authCode,
-                    function (responseData) {
-                      var accessToken = responseData['access_token'],
-                      refreshToken = responseData['refresh_token'],
-                      expiresIn = responseData['expires_in'];
-                      if (accessToken && refreshToken && expiresIn) {
-                        // Save the access token on a session. Using cookies in this case:
-                        res.cookie('access_token', accessToken, { maxAge: expiresIn * 1000});
-                        res.cookie('refresh_token', refreshToken);
+                    authClient.requestAccessTokenByAuthCode(authCode,
+                      function (responseData) {
+                        var accessToken = responseData['access_token'],
+                          refreshToken = responseData['refresh_token'],
+                          expiresIn = responseData['expires_in'];
+                        if (accessToken && refreshToken && expiresIn) {
+                          // Save the access token on a session. Using cookies in this case:
+                          res.cookie('access_token', accessToken, { maxAge: expiresIn * 1000});
+                          res.cookie('refresh_token', refreshToken);
 
-                        res.render('callback');
-                      } else {
-                        // Handle an authentication error response
-                        res.render('error', {
-                          message: 'Invalid Live Connect Response',
-                          error: {details: JSON.stringify(responseData, null, 2)}
-                        });
-                      }
-                    });
+                          res.render('callback');
+                        } else {
+                          // Handle an authentication error response
+                          res.render('error', {
+                            message: 'Invalid Azure AD Auth Response',
+                            error: {details: JSON.stringify(responseData, null, 2)}
+                          });
+                        }
+                      });
                   } else {
                     // Handle an error passed from the callback query params
                     var authError = req.query['error'],
-                    authErrorDescription = req.query['error_description'];
+                      authErrorDescription = req.query['error_description'];
                     res.render('error', {
-                      message: 'Live Connect Auth Error',
+                      message: 'Azure AD Auth Error',
                       error: {status: authError, details: authErrorDescription}
                     });
                   }
-
                 });
               </pre>
             </div>
