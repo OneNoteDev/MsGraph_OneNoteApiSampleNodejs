@@ -39,18 +39,21 @@ After you've setup your web server described above,....
 
 1.	Download the repo as a ZIP file to your local computer, and extract the files. Or, clone the repository into a local copy of Git.
 2.	Go to the [Microsoft app registration page](https://account.live.com/developers/applications/index).
-3.	On the API Settings page, set Mobile or desktop setting to No.
-4.	Set the Redirect URI to the domain name of your web site, as in the following example. The root domain name must be unique, so if you use one domain for testing and another for production, you'll need to register separate client ids and secrets for each domain. ![Setting API properties in the Microsoft application portal.](images/OneNoteMSAScreen.png)
-5.	On the App Setting page, copy the client ID and secret into the config.js file.
-6.	Open a command prompt and go to the root directory of the project.
-7.	Setup project dependencies with the `npm install` command.
-8.	Run the app with the `npm start` command.
-9.	Open a browser and navigate to the app running by default on port 3000.
-10.	Login using your Microsoft account, and allow the app to create pages in your OneNote notebooks.
+3.	Set the Redirect URI to the domain name of your web site. In this example, we used http://localhost:3000/callback. The root domain name must be unique, so if you use one domain for testing and another for production, you'll need to register separate client ids and secrets for each domain.
+4.	On the App Setting page, copy the client ID and secret into the config.js file.
+5.	Open a command prompt and go to the root directory of the project.
+6.	Setup project dependencies with the `npm install` command.
+7.	Run the app with the `npm start` command.
+8.	Open a browser and navigate to the app running by default on port 3000.
+9.	Login using your Microsoft account (Org ID or MSA), and allow the app to create pages in your OneNote notebooks.
 
 ### Version info
 
-This is the initial public release for this code sample.
+| Date         | Change                                                                         |
+|--------------|--------------------------------------------------------------------------------|
+| May 2017     | Updated to utilize the Microsoft Graph v1.0 base URL for OneNote resources     |
+| April 2017   | Updated to utilize the Microsoft Graph API endpoints.                          |
+| June 2016    | Initial public release for this code sample.                                   |
 
 ### Learning More
 
